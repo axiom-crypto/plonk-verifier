@@ -215,5 +215,5 @@ fn main() {
         Some(Path::new("examples/StandardPlonkVerifier.sol")),
     );
     #[cfg(feature = "revm")]
-    evm_verify(_deployment_code, instances, _proof);
+    evm_verify(_deployment_code, instances, _proof).expect("evm_verify should succeed");
 }

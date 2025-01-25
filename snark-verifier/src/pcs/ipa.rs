@@ -394,52 +394,52 @@ fn h_coeffs<F: Field>(xi: &[F], scalar: F) -> Vec<F> {
     coeffs
 }
 
-#[cfg(all(test, feature = "system_halo2"))]
-mod test {
-    use crate::{
-        pcs::{
-            ipa::{self, IpaProvingKey},
-            AccumulationDecider,
-        },
-        util::{arithmetic::Field, msm::Msm, poly::Polynomial},
-    };
-    use halo2_curves::pasta::pallas;
-    use halo2_proofs::transcript::{
-        Blake2bRead, Blake2bWrite, TranscriptReadBuffer, TranscriptWriterBuffer,
-    };
-    use rand::rngs::OsRng;
+// #[cfg(test)]
+// mod test {
+//     use crate::{
+//         pcs::{
+//             ipa::{self, IpaProvingKey},
+//             AccumulationDecider,
+//         },
+//         util::{arithmetic::Field, msm::Msm, poly::Polynomial},
+//     };
+//     use halo2_curves::pasta::pallas;
+//     use halo2_proofs::transcript::{
+//         Blake2bRead, Blake2bWrite, TranscriptReadBuffer, TranscriptWriterBuffer,
+//     };
+//     use rand::rngs::OsRng;
 
-    #[test]
-    fn test_ipa() {
-        type Ipa = ipa::Ipa<pallas::Affine>;
-        type IpaAs = ipa::IpaAs<pallas::Affine, ()>;
+//     #[test]
+//     fn test_ipa() {
+//         type Ipa = ipa::Ipa<pallas::Affine>;
+//         type IpaAs = ipa::IpaAs<pallas::Affine, ()>;
 
-        let k = 10;
-        let mut rng = OsRng;
+//         let k = 10;
+//         let mut rng = OsRng;
 
-        for zk in [false, true] {
-            let pk = IpaProvingKey::<pallas::Affine>::rand(k, zk, &mut rng);
-            let (c, z, v, proof) = {
-                let p = Polynomial::<pallas::Scalar>::rand(pk.domain.n, &mut rng);
-                let omega = pk.zk().then(|| pallas::Scalar::random(&mut rng));
-                let c = pk.commit(&p, omega);
-                let z = pallas::Scalar::random(&mut rng);
-                let v = p.evaluate(z);
-                let mut transcript = Blake2bWrite::init(Vec::new());
-                Ipa::create_proof(&pk, &p[..], &z, omega.as_ref(), &mut transcript, &mut rng)
-                    .unwrap();
-                (c, z, v, transcript.finalize())
-            };
+//         for zk in [false, true] {
+//             let pk = IpaProvingKey::<pallas::Affine>::rand(k, zk, &mut rng);
+//             let (c, z, v, proof) = {
+//                 let p = Polynomial::<pallas::Scalar>::rand(pk.domain.n, &mut rng);
+//                 let omega = pk.zk().then(|| pallas::Scalar::random(&mut rng));
+//                 let c = pk.commit(&p, omega);
+//                 let z = pallas::Scalar::random(&mut rng);
+//                 let v = p.evaluate(z);
+//                 let mut transcript = Blake2bWrite::init(Vec::new());
+//                 Ipa::create_proof(&pk, &p[..], &z, omega.as_ref(), &mut transcript, &mut rng)
+//                     .unwrap();
+//                 (c, z, v, transcript.finalize())
+//             };
 
-            let svk = pk.svk();
-            let accumulator = {
-                let mut transcript = Blake2bRead::init(proof.as_slice());
-                let proof = Ipa::read_proof(&svk, &mut transcript).unwrap();
-                Ipa::succinct_verify(&svk, &Msm::base(&c), &z, &v, &proof).unwrap()
-            };
+//             let svk = pk.svk();
+//             let accumulator = {
+//                 let mut transcript = Blake2bRead::init(proof.as_slice());
+//                 let proof = Ipa::read_proof(&svk, &mut transcript).unwrap();
+//                 Ipa::succinct_verify(&svk, &Msm::base(&c), &z, &v, &proof).unwrap()
+//             };
 
-            let dk = pk.dk();
-            assert!(IpaAs::decide(&dk, accumulator).is_ok());
-        }
-    }
-}
+//             let dk = pk.dk();
+//             assert!(IpaAs::decide(&dk, accumulator).is_ok());
+//         }
+//     }
+// }

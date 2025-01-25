@@ -31,7 +31,7 @@ pub struct AggregationDependencyIntentOwned {
     pub agg_vk_hash_data: Option<((usize, usize), Fr)>,
 }
 
-impl<'a> AggregationDependencyIntent<'a> {
+impl AggregationDependencyIntent<'_> {
     /// Converts `self` into `PlonkProtocol`
     pub fn compile(self, params: &ParamsKZG<Bn256>) -> PlonkProtocol<G1Affine> {
         compile(

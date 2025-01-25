@@ -13,10 +13,7 @@ use crate::{
     },
     Error,
 };
-use std::{
-    collections::{BTreeMap, HashMap},
-    iter,
-};
+use std::{collections::BTreeMap, iter};
 
 /// Proof of PLONK with [`PolynomialCommitmentScheme`] that has
 /// [`AccumulationScheme`].
@@ -164,7 +161,7 @@ where
     pub(super) fn queries(
         &self,
         protocol: &PlonkProtocol<C, L>,
-        mut evaluations: HashMap<Query, L::LoadedScalar>,
+        mut evaluations: BTreeMap<Query, L::LoadedScalar>,
     ) -> Vec<pcs::Query<Rotation, L::LoadedScalar>> {
         if protocol.queries.is_empty() {
             return vec![];
@@ -199,8 +196,8 @@ where
         &'a self,
         protocol: &'a PlonkProtocol<C, L>,
         common_poly_eval: &CommonPolynomialEvaluation<C, L>,
-        evaluations: &mut HashMap<Query, L::LoadedScalar>,
-    ) -> Result<Vec<Msm<C, L>>, Error> {
+        evaluations: &mut BTreeMap<Query, L::LoadedScalar>,
+    ) -> Result<Vec<Msm<'a, C, L>>, Error> {
         let loader = common_poly_eval.zn().loader();
         let mut commitments = iter::empty()
             .chain(protocol.preprocessed.iter().map(Msm::base))
@@ -304,7 +301,7 @@ where
         protocol: &PlonkProtocol<C, L>,
         instances: &[Vec<L::LoadedScalar>],
         common_poly_eval: &CommonPolynomialEvaluation<C, L>,
-    ) -> Result<HashMap<Query, L::LoadedScalar>, Error> {
+    ) -> Result<BTreeMap<Query, L::LoadedScalar>, Error> {
         let loader = common_poly_eval.zn().loader();
         let instance_evals = protocol.instance_committing_key.is_none().then(|| {
             let offset = protocol.preprocessed.len();

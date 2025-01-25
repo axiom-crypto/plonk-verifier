@@ -256,7 +256,7 @@ mod halo2_lib {
         }
     }
 
-    impl<'chip, C: CurveAffineExt> EccInstructions<C> for BaseFieldEccChip<'chip, C>
+    impl<C: CurveAffineExt> EccInstructions<C> for BaseFieldEccChip<'_, C>
     where
         C::ScalarExt: BigPrimeField,
         C::Base: BigPrimeField,

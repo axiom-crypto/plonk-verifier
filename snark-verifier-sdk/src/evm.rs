@@ -175,10 +175,15 @@ pub fn gen_evm_verifier_shplonk<C: CircuitExt<Fr>>(
 }
 
 #[cfg(feature = "revm")]
-pub fn evm_verify(deployment_code: Vec<u8>, instances: Vec<Vec<Fr>>, proof: Vec<u8>) {
+pub fn evm_verify(
+    deployment_code: Vec<u8>,
+    instances: Vec<Vec<Fr>>,
+    proof: Vec<u8>,
+) -> Result<u64, String> {
     let calldata = encode_calldata(&instances, &proof);
-    let gas_cost = snark_verifier::loader::evm::deploy_and_call(deployment_code, calldata).unwrap();
+    let gas_cost = snark_verifier::loader::evm::deploy_and_call(deployment_code, calldata)?;
     dbg!(gas_cost);
+    Ok(gas_cost)
 }
 
 pub fn write_calldata(instances: &[Vec<Fr>], proof: &[u8], path: &Path) -> io::Result<String> {

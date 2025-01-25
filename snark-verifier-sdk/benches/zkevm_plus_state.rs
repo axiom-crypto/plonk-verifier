@@ -123,7 +123,7 @@ fn bench(c: &mut Criterion) {
             None,
         );
 
-        evm_verify(deployment_code, instances.clone(), proof);
+        evm_verify(deployment_code, instances.clone(), proof).expect("evm_verify should succeed");
 
         let start2 = start_timer!(|| "Create EVM GWC proof");
         let agg_circuit = AggregationCircuit::new::<SHPLONK>(
@@ -143,7 +143,7 @@ fn bench(c: &mut Criterion) {
             None,
         );
 
-        evm_verify(deployment_code, instances, proof);
+        evm_verify(deployment_code, instances, proof).expect("evm_verify should succeed");
     }
 
     // run benches

@@ -464,7 +464,7 @@ mod halo2_lib {
     use halo2_base::utils::{BigPrimeField, CurveAffineExt};
     use halo2_ecc::ecc::BaseFieldEccChip;
 
-    impl<'chip, C: CurveAffineExt> NativeEncoding<C> for BaseFieldEccChip<'chip, C>
+    impl<C: CurveAffineExt> NativeEncoding<C> for BaseFieldEccChip<'_, C>
     where
         C::Scalar: BigPrimeField,
         C::Base: BigPrimeField,

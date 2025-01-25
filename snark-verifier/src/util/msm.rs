@@ -23,7 +23,7 @@ pub struct Msm<'a, C: CurveAffine, L: Loader<C>> {
     bases: Vec<&'a L::LoadedEcPoint>,
 }
 
-impl<'a, C, L> Default for Msm<'a, C, L>
+impl<C, L> Default for Msm<'_, C, L>
 where
     C: CurveAffine,
     L: Loader<C>,
@@ -169,7 +169,7 @@ where
     }
 }
 
-impl<'a, C, L> MulAssign<&L::LoadedScalar> for Msm<'a, C, L>
+impl<C, L> MulAssign<&L::LoadedScalar> for Msm<'_, C, L>
 where
     C: CurveAffine,
     L: Loader<C>,
@@ -194,7 +194,7 @@ where
     }
 }
 
-impl<'a, C, L> Sum for Msm<'a, C, L>
+impl<C, L> Sum for Msm<'_, C, L>
 where
     C: CurveAffine,
     L: Loader<C>,

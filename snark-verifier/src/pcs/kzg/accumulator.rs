@@ -205,8 +205,8 @@ mod halo2 {
         use halo2_base::utils::CurveAffineExt;
         use halo2_ecc::ecc::BaseFieldEccChip;
 
-        impl<'chip, C, const LIMBS: usize, const BITS: usize>
-            LimbsEncodingInstructions<C, LIMBS, BITS> for BaseFieldEccChip<'chip, C>
+        impl<C, const LIMBS: usize, const BITS: usize>
+            LimbsEncodingInstructions<C, LIMBS, BITS> for BaseFieldEccChip<'_, C>
         where
             C: CurveAffineExt,
             C::ScalarExt: BigPrimeField,

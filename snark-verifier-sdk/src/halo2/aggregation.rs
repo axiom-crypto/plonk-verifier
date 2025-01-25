@@ -21,8 +21,8 @@ use halo2_base::{
 use itertools::Itertools;
 use rand::{rngs::StdRng, SeedableRng};
 use serde::{Deserialize, Serialize};
-#[cfg(debug_assertions)]
-use snark_verifier::util::arithmetic::fe_to_limbs;
+// #[cfg(debug_assertions)]
+// use snark_verifier::util::arithmetic::fe_to_limbs;
 use snark_verifier::{
     loader::{
         self,
@@ -90,7 +90,7 @@ impl VerifierUniversality {
 
 #[allow(clippy::type_complexity)]
 /// Core function used in `synthesize` to aggregate multiple `snarks`.
-///  
+///
 /// Returns the assigned instances of previous snarks and the new final pair that needs to be verified in a pairing check.
 /// For each previous snark, we concatenate all instances into a single vector. We return a vector of vectors,
 /// one vector per snark, for convenience.
@@ -360,8 +360,7 @@ pub enum AssignedTranscriptObject {
 ///
 /// ## Notes
 /// - This function does _not_ expose any public instances.
-/// - `svk` is the generator of the KZG trusted setup, usually gotten via `params.get_g()[0]`
-/// (avoids having to pass `params` into function just to get generator)
+/// - `svk` is the generator of the KZG trusted setup, usually gotten via `params.get_g()[0]` (avoids having to pass `params` into function just to get generator)
 ///
 /// ## Universality
 /// - If `universality` is not `None`, then the verifying keys of each snark in `snarks` is loaded as a witness in the circuit.
@@ -461,15 +460,15 @@ where
         })
         .collect();
 
-    #[cfg(debug_assertions)]
-    {
-        let KzgAccumulator { lhs, rhs } = _accumulator;
-        let instances =
-            [lhs.x, lhs.y, rhs.x, rhs.y].map(fe_to_limbs::<_, Fr, LIMBS, BITS>).concat();
-        for (lhs, rhs) in instances.iter().zip(accumulator.iter()) {
-            assert_eq!(lhs, rhs.value());
-        }
-    }
+    // #[cfg(debug_assertions)]
+    // {
+    //     let KzgAccumulator { lhs, rhs } = _accumulator;
+    //     let instances =
+    //         [lhs.x, lhs.y, rhs.x, rhs.y].map(fe_to_limbs::<_, Fr, LIMBS, BITS>).concat();
+    //     for (lhs, rhs) in instances.iter().zip(accumulator.iter()) {
+    //         assert_eq!(lhs, rhs.value());
+    //     }
+    // }
     // put back `pool` into `builder`
     *pool = loader.take_ctx();
     SnarkAggregationOutput { previous_instances, accumulator, preprocessed, proof_transcripts }

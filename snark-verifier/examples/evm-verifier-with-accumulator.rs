@@ -307,6 +307,7 @@ mod aggregation {
     #[derive(Clone, Debug)]
     pub struct AggregationCircuit {
         pub inner: BaseCircuitBuilder<Fr>,
+        #[allow(dead_code)]
         pub as_proof: Vec<u8>,
     }
 
